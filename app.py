@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from IPython import embed
+import config
 import requests
 import json
 
@@ -13,8 +14,8 @@ def home():
 def calories(meal):
     size = request.args['size'].lower()
     headers = {
-        'x-app-id': 'f0f958da',
-        'x-app-key': 'b2321d5535340e8928c1ea9e6b0ff7de',
+        'x-app-id': config.nutritionx_id,
+        'x-app-key': config.nutritionx_key,
         'Content-Type': 'application/json'
     }
 
@@ -38,10 +39,16 @@ def calories(meal):
     try:
         if food_data["foods"]:
             calories = round(food_data["foods"][0]["nf_calories"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+            sugars   = round(food_data["foods"][0]["nf_sugars"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+            fats     = round(food_data["foods"][0]["nf_total_fat"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+            protein  = round(food_data["foods"][0]["nf_protein"] / food_data["foods"][0]["serving_qty"] * qty, 2)
             name = food_data["foods"][0]["food_name"]
 
             food_data = {
                 'calories': calories,
+                'sugars': sugars,
+                'fats': fats,
+                'protein': protein,
                 'size': size,
                 'meal': meal
             }
