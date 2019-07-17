@@ -37,29 +37,29 @@ def calories(meal):
     response = requests.post('https://trackapi.nutritionix.com/v2/natural/nutrients/', json=data, headers=headers)
     food_data = json.loads(response.text)
     try:
-        if food_data["foods"]:
-            calories = round(food_data["foods"][0]["nf_calories"] / food_data["foods"][0]["serving_qty"] * qty, 2)
-            sugars   = round(food_data["foods"][0]["nf_sugars"] / food_data["foods"][0]["serving_qty"] * qty, 2)
-            fats     = round(food_data["foods"][0]["nf_total_fat"] / food_data["foods"][0]["serving_qty"] * qty, 2)
-            protein  = round(food_data["foods"][0]["nf_protein"] / food_data["foods"][0]["serving_qty"] * qty, 2)
-            name = food_data["foods"][0]["food_name"]
+        calories  = round(food_data["foods"][0]["nf_calories"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+        sugars    = round(food_data["foods"][0]["nf_sugars"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+        fats      = round(food_data["foods"][0]["nf_total_fat"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+        protein   = round(food_data["foods"][0]["nf_protein"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+        thumbnail = food_data["foods"][0]["photo"]["thumb"]
+        name = food_data["foods"][0]["food_name"]
 
-            food_data = {
-                'calories': calories,
-                'sugars': sugars,
-                'fats': fats,
-                'protein': protein,
-                'size': size,
-                'meal': meal
-            }
+        food_data = {
+            'thumbnail': thumbnail,
+            'calories': calories,
+            'sugars': sugars,
+            'fats': fats,
+            'protein': protein,
+            'size': size,
+            'meal': meal
+        }
 
-            if meal == name:
-                return jsonify(food_data)
-            else:
-                return render_template('meal_not_found.html')
+        if meal == name:
+            return jsonify(food_data)
+        else:
+            return render_template('meal_not_found.html')
     except KeyError:
         return render_template('meal_not_found.html')
-
 
 @app.errorhandler(404)
 def page_not_found(e):
