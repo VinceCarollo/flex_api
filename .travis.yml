@@ -1,0 +1,18 @@
+language: python
+python:
+- '2.6'
+- '2.7'
+- '3.3'
+- '3.4'
+- '3.5'
+- 3.5-dev
+- '3.6'
+- 3.6-dev
+install:
+- pip install -r requirements.txt
+script:
+- pytest
+- YAML
+deploy:
+  api_key:
+    secure: 67Sla+x5nSuY2JxQGM5NIxsmSu/CoX6MFt6ldZ328ya/g9Yn3S9MgrzxEMImhQib6EqPKsfjpMy17wPB+5ory3f8PYnIsvAHMEaYRov/2sg1i1Vzeq2zj5w+VFoSXF380LVxu3Ibk185EvgXw1T0c9h0FklmdZu4KqR7I1q2jXcKa03YthJnnIjTmQ2iYLn0ZfT/oZ9ZQ+iTUwBjrXleJyJ9Segj3mZ+sFsQg5JnnCACQWNgadLIAhOpNbBkQjENQCPS4dVpfGU9OQcdXF03hRfg4bMBpsGo1NoDfas3EKf8yfFRINoNL5JsP5FJilkWYU879a7Ug7iBIuEhyjguzsM2orlm+agNOInE4s8RHq903qCphQkQggPLonqdrcMhlmhvG3mf3dZwDdTA1CAzrvUQHYxDk2QuQA5PV96CGwjszgrvCWHJyY3mlJMkppIcxeb8yCjTJjaaKK+B63zvhHTH6pyTs/kGkmf3idntUN0LrOP2R6Pky9+5jnfpAJ28gtPrGFtWra39sOz5n7RU6GWq0VGW3p7iuU3wlpcjx9b8sd9RxEAL+zOdSXNQvqoqlKMavGUOkBc6OqtWaNTuhElcDsZXcnGfthxvW3y7sZt7qAhV3nGkKJdd7Utm5flC/kpeXJ/JjGK4hQZRz68O0O8XPb249VRHIcX5adVNk+0=
