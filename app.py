@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify, render_template
-from IPython import embed
 import config
 import requests
 import json
@@ -57,9 +56,9 @@ def calories(meal):
         if meal == name:
             return jsonify(food_data)
         else:
-            return render_template('meal_not_found.html')
+            return render_template('meal_not_found.html'), 404
     except KeyError:
-        return render_template('meal_not_found.html')
+        return render_template('meal_not_found.html'), 404
 
 @app.errorhandler(404)
 def page_not_found(e):
