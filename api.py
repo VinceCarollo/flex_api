@@ -1,7 +1,18 @@
 from flask import Flask, request, jsonify, render_template
-import config
 import requests
 import json
+import os
+import environ
+
+ROOT_PATH = os.path.abspath(__file__)
+ENV_PATH = os.path.join(ROOT_PATH, '.env')
+
+env = environ.Env(
+    NUTRITIONX_ID=str,
+    NUTRITIONX_KEY=str,
+)
+
+environ.Env.read_env(ENV_PATH)
 
 app = Flask(__name__)
 
@@ -13,8 +24,8 @@ def home():
 def calories(meal):
     size = request.args['size'].lower()
     headers = {
-        'x-app-id': config.nutritionx_id,
-        'x-app-key': config.nutritionx_key,
+        'x-app-id': env('NUTRITIONX_ID'),
+        'x-app-key': env('NUTRITIONX_KEY'),
         'Content-Type': 'application/json'
     }
 
