@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify, render_template
-from IPython import embed
 import config
 import requests
 import json
