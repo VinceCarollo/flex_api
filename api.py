@@ -46,9 +46,15 @@ def calories(meal):
 
     response = requests.post('https://trackapi.nutritionix.com/v2/natural/nutrients/', json=data, headers=headers)
     food_data = json.loads(response.text)
+
     try:
+
+        if food_data["foods"][0]["nf_sugars"].__class__.__name__ == 'NoneType':
+            sugars = 'None'
+        else:
+            sugars    = round(food_data["foods"][0]["nf_sugars"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+
         calories  = round(food_data["foods"][0]["nf_calories"] / food_data["foods"][0]["serving_qty"] * qty, 2)
-        sugars    = round(food_data["foods"][0]["nf_sugars"] / food_data["foods"][0]["serving_qty"] * qty, 2)
         fats      = round(food_data["foods"][0]["nf_total_fat"] / food_data["foods"][0]["serving_qty"] * qty, 2)
         protein   = round(food_data["foods"][0]["nf_protein"] / food_data["foods"][0]["serving_qty"] * qty, 2)
         thumbnail = food_data["foods"][0]["photo"]["thumb"]
