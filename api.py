@@ -50,13 +50,15 @@ def calories(meal):
     try:
 
         if food_data["foods"][0]["nf_sugars"].__class__.__name__ == 'NoneType':
-            sugars = 'None'
+            sugars = 0
         else:
-            sugars    = round(food_data["foods"][0]["nf_sugars"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+            sugars    = int(food_data["foods"][0]["nf_sugars"] / food_data["foods"][0]["serving_qty"] * qty)
 
-        calories  = round(food_data["foods"][0]["nf_calories"] / food_data["foods"][0]["serving_qty"] * qty, 2)
-        fats      = round(food_data["foods"][0]["nf_total_fat"] / food_data["foods"][0]["serving_qty"] * qty, 2)
-        protein   = round(food_data["foods"][0]["nf_protein"] / food_data["foods"][0]["serving_qty"] * qty, 2)
+        calories  = int(food_data["foods"][0]["nf_calories"] / food_data["foods"][0]["serving_qty"])
+        fats      = int(food_data["foods"][0]["nf_total_fat"] / food_data["foods"][0]["serving_qty"])
+        protein   = int(food_data["foods"][0]["nf_protein"] / food_data["foods"][0]["serving_qty"])
+        sodium   = int(food_data["foods"][0]["nf_sodium"] / food_data["foods"][0]["serving_qty"])
+        carbs   = int(food_data["foods"][0]["nf_total_carbohydrate"] / food_data["foods"][0]["serving_qty"])
         thumbnail = food_data["foods"][0]["photo"]["thumb"]
         name = food_data["foods"][0]["food_name"]
 
@@ -66,6 +68,8 @@ def calories(meal):
             'sugars': sugars,
             'fats': fats,
             'protein': protein,
+            'sodium': sodium,
+            'carbs': carbs,
             'size': size,
             'meal': meal
         }
