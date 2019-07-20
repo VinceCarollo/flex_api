@@ -10,6 +10,8 @@ ENV_PATH = os.path.join(ROOT_PATH, '.env')
 env = environ.Env(
     NUTRITIONX_ID=str,
     NUTRITIONX_KEY=str,
+    EDAMAM_ID=str,
+    EDAMAM_KEY=str,
 )
 
 environ.Env.read_env(ENV_PATH)
@@ -48,19 +50,18 @@ def calories(meal):
     food_data = json.loads(response.text)
 
     try:
-
         if food_data["foods"][0]["nf_sugars"].__class__.__name__ == 'NoneType':
             sugars = 0
         else:
             sugars    = int(food_data["foods"][0]["nf_sugars"] / food_data["foods"][0]["serving_qty"] * qty)
 
-        calories  = int(food_data["foods"][0]["nf_calories"] / food_data["foods"][0]["serving_qty"])
-        fats      = int(food_data["foods"][0]["nf_total_fat"] / food_data["foods"][0]["serving_qty"])
-        protein   = int(food_data["foods"][0]["nf_protein"] / food_data["foods"][0]["serving_qty"])
-        sodium   = int(food_data["foods"][0]["nf_sodium"] / food_data["foods"][0]["serving_qty"])
-        carbs   = int(food_data["foods"][0]["nf_total_carbohydrate"] / food_data["foods"][0]["serving_qty"])
+        calories  = int(food_data["foods"][0]["nf_calories"] / food_data["foods"][0]["serving_qty"] * qty)
+        fats      = int(food_data["foods"][0]["nf_total_fat"] / food_data["foods"][0]["serving_qty"] * qty)
+        protein   = int(food_data["foods"][0]["nf_protein"] / food_data["foods"][0]["serving_qty"] * qty)
+        sodium    = int(food_data["foods"][0]["nf_sodium"] / food_data["foods"][0]["serving_qty"] * qty)
+        carbs     = int(food_data["foods"][0]["nf_total_carbohydrate"] / food_data["foods"][0]["serving_qty"] * qty)
         thumbnail = food_data["foods"][0]["photo"]["thumb"]
-        name = food_data["foods"][0]["food_name"]
+        name      = food_data["foods"][0]["food_name"]
 
         food_data = {
             'thumbnail': thumbnail,
@@ -81,6 +82,74 @@ def calories(meal):
     except KeyError:
         return render_template('meal_not_found.html'), 404
 
+@app.route('/meals')
+def meals():
+
+    try:
+        calorie_max = request.args['calories']
+    except KeyError:
+        return render_template('calories_required.html'), 404
+
+    try:
+        excluded = request.args['excluded']
+    except KeyError:
+        excluded = ''
+
+    try:
+        diet = request.args['diet']
+    except KeyError:
+        diet = 'balanced'
+
+    try:
+        if request.args['vegan'] == 'true':
+            health = 'vegan'
+        else:
+            health = 'alcohol-free'
+    except KeyError:
+        health = 'alcohol-free'
+
+    try:
+        if request.args['vegetarian'] == 'true':
+            health = 'vegetarian'
+        else:
+            health = 'alcohol-free'
+    except KeyError:
+        health = 'alcohol-free'
+
+    id = env('EDAMAM_ID')
+    key = env('EDAMAM_KEY')
+
+    response = requests.get(f'https://api.edamam.com/search?q=*&app_id={id}&app_key={key}&from=0&to=100&calories=0-{calorie_max}&excluded={excluded}&diet={diet}&health={health}')
+
+
+    meal_data = json.loads(response.text)
+
+    meals = {}
+
+    try:
+        for meal in meal_data['hits']:
+            name = meal['recipe']['label']
+            thumbnail = meal['recipe']['image']
+            url = meal['recipe']['url']
+            servings = int(meal['recipe']['yield'])
+            calories_per_serving = int(meal['recipe']['calories'] / servings)
+            carbs_per_serving = int(meal['recipe']['digest'][1]['total'] / servings)
+            protein_per_serving = int(meal['recipe']['digest'][2]['total'] / servings)
+
+            meals[name] = {
+                'thumbnail': thumbnail,
+                'servings': servings,
+                'url': url,
+                'calories_per_serving': calories_per_serving,
+                'carbs_per_serving': carbs_per_serving,
+                'protein_per_serving': protein_per_serving
+            }
+
+    except KeyError:
+        render_template('meal_not_found.html')
+
+    return jsonify(meals)
+    
 @app.errorhandler(404)
 def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
