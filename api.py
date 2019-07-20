@@ -3,8 +3,9 @@ import requests
 import json
 import os
 import environ
+from pathlib import Path, PurePath
 
-ROOT_PATH = os.path.abspath(__file__)
+ROOT_PATH = Path.cwd()
 ENV_PATH = os.path.join(ROOT_PATH, '.env')
 
 env = environ.Env(

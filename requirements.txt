@@ -3,12 +3,16 @@ chardet==3.0.4
 Click==7.0
 config==0.4.2
 django-environ==0.4.5
+environs==5.1.0
 Flask==1.1.1
 gunicorn==19.9.0
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.1
 MarkupSafe==1.1.1
+marshmallow==2.19.5
+pathlib==1.0.1
+python-dotenv==0.10.3
 requests==2.22.0
 urllib3==1.25.3
 Werkzeug==0.15.5
