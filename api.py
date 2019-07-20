@@ -93,7 +93,7 @@ def meals():
     try:
         excluded = request.args['excluded']
     except KeyError:
-        excluded = ''
+        excluded = 'None'
 
     try:
         diet = request.args['diet']
@@ -101,15 +101,10 @@ def meals():
         diet = 'balanced'
 
     try:
-        if request.args['vegan'] == 'true':
+        constraints = request.args['constraints']
+        if constraints == 'vegan':
             health = 'vegan'
-        else:
-            health = 'alcohol-free'
-    except KeyError:
-        health = 'alcohol-free'
-
-    try:
-        if request.args['vegetarian'] == 'true':
+        elif constraints == 'vegetarian':
             health = 'vegetarian'
         else:
             health = 'alcohol-free'
@@ -121,10 +116,17 @@ def meals():
 
     response = requests.get(f'https://api.edamam.com/search?q=*&app_id={id}&app_key={key}&from=0&to=100&calories=0-{calorie_max}&excluded={excluded}&diet={diet}&health={health}')
 
-
     meal_data = json.loads(response.text)
 
-    meals = {}
+    meals = {
+        'params': {
+            'calorie_max': calorie_max,
+            'excluded': excluded,
+            'diet': diet,
+            'constraints': health
+        },
+        'recipes':[]
+    }
 
     try:
         for meal in meal_data['hits']:
@@ -136,23 +138,24 @@ def meals():
             carbs_per_serving = int(meal['recipe']['digest'][1]['total'] / servings)
             protein_per_serving = int(meal['recipe']['digest'][2]['total'] / servings)
 
-            meals[name] = {
+            meals['recipes'].append({
+                'name': name,
                 'thumbnail': thumbnail,
                 'servings': servings,
                 'url': url,
                 'calories_per_serving': calories_per_serving,
                 'carbs_per_serving': carbs_per_serving,
                 'protein_per_serving': protein_per_serving
-            }
+            })
 
     except KeyError:
-        render_template('meal_not_found.html')
+        return render_template('meal_not_found.html'), 404
 
     return jsonify(meals)
-    
+
 @app.errorhandler(404)
 def page_not_found(e):
-    return "<h1>404</h1><p>The resource could not be found.</p>", 404
+    return render_template('meal_not_found.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
