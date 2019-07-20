@@ -102,10 +102,10 @@ def meals():
         diet = 'balanced'
 
     try:
-        constraints = request.args['constraints']
-        if constraints == 'vegan':
+        restriction = request.args['restriction']
+        if restriction == 'vegan':
             health = 'vegan'
-        elif constraints == 'vegetarian':
+        elif restriction == 'vegetarian':
             health = 'vegetarian'
         else:
             health = 'alcohol-free'
@@ -124,7 +124,7 @@ def meals():
             'calorie_max': calorie_max,
             'excluded': excluded,
             'diet': diet,
-            'constraints': health
+            'restriction': health
         },
         'recipes':[]
     }
