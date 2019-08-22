@@ -45,3 +45,68 @@ Also a /food_info endpoint for retrieving macronutrients for searched meal
 ## Authors
 
 * **Vince Carollo** - *All work* - [VinceCarollo](https://github.com/VinceCarollo)
+
+## Endpoints
+
+#### /food_info/pizza/?size=small
+
+Returns macronutrients for meal given.
+
+Input (params):
+- Meal Name ('pizza'), Size(small, medium, large)
+
+Response:
+```json
+{
+  calories: 213,
+  carbs: 26,
+  fats: 7,
+  meal: "pizza",
+  protein: 9,
+  size: "small",
+  sodium: 479,
+  sugars: 2,
+  thumbnail: "https://d2xdmhkmkbyw75.cloudfront.net/1060_thumb.jpg"
+}
+```
+
+#### /meals?calories=200
+
+Returns one hundred meals that meet requirements given.
+
+Input (params):
+- Calories (calorie max, required)
+- Excluded (excluded ingredients)(?excluded=nuts)
+- Diet (?diet=balanced, or high_protein, etc.)
+- Restriction (?restriction=vegan, or vegetarian)
+
+Response:
+```json
+{
+  params: {
+  calorie_max: "200",
+  diet: "balanced",
+  excluded: "None",
+  restriction: "alcohol-free"
+},
+  recipes: [
+  {
+    calories_per_serving: 109,
+    carbs_per_serving: 10,
+    name: "Crispy Cheese Tacos Recipe",
+    protein_per_serving: 4,
+    servings: 8,
+    thumbnail: "https://www.edamam.com/web-img/9fb/9fbdf8a084eb5fbbf8e116867a99e8cc.jpg",
+    url: "http://www.seriouseats.com/recipes/2015/04/crispy-cheese-tacos-recipe.html"
+  },
+  {
+    calories_per_serving: 133,
+    carbs_per_serving: 17,
+    name: "Vanilla Frozen Yogurt Recipe",
+    protein_per_serving: 6,
+    servings: 10,
+    thumbnail: "https://www.edamam.com/web-img/146/146c072c175df9f407f9516a3f6466eb.jpg",
+    url: "http://www.101cookbooks.com/archives/a-frozen-yogurt-recipe-to-rival-pinkberrys-recipe.html"
+  }
+]}
+```
