@@ -56,7 +56,7 @@ Input (params):
 - Meal Name ('pizza'), Size(small, medium, large)
 
 Response:
-```json
+```
 {
   calories: 213,
   carbs: 26,
@@ -81,7 +81,7 @@ Input (params):
 - Restriction (?restriction=vegan, or vegetarian)
 
 Response:
-```json
+```
 {
   params: {
   calorie_max: "200",
