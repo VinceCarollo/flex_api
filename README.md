@@ -76,7 +76,7 @@ Returns one hundred meals that meet requirements given.
 
 Input (params):
 - Calories (calorie max, required)
-- Excluded (excluded ingredients)(?excluded=nuts)
+- Excluded (?excluded=nuts)
 - Diet (?diet=balanced, or high_protein, etc.)
 - Restriction (?restriction=vegan, or vegetarian)
 
